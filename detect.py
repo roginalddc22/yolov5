@@ -26,7 +26,6 @@ Usage - formats:
 
 import argparse
 import os
-import platform
 import sys
 from pathlib import Path
 
@@ -53,7 +52,7 @@ def run(
         source=ROOT / 'data/images',  # file/dir/URL/glob, 0 for webcam
         data=ROOT / 'data/coco128.yaml',  # dataset.yaml path
         imgsz=(640, 640),  # inference size (height, width)
-        conf_thres=0.25,  # confidence threshold
+        conf_thres=0.5,  # confidence threshold
         iou_thres=0.45,  # NMS IOU threshold
         max_det=1000,  # maximum detections per image
         device='',  # cuda device, i.e. 0 or 0,1,2,3 or cpu
@@ -173,8 +172,10 @@ def run(
 
             # Stream results
             im0 = annotator.result()
+            cv2.imshow('detection',im0)
+            cv2.waitKey(1)
             if view_img:
-                if platform.system() == 'Linux' and p not in windows:
+                if p not in windows:
                     windows.append(p)
                     cv2.namedWindow(str(p), cv2.WINDOW_NORMAL | cv2.WINDOW_KEEPRATIO)  # allow window resize (Linux)
                     cv2.resizeWindow(str(p), im0.shape[1], im0.shape[0])
@@ -210,7 +211,7 @@ def run(
         s = f"\n{len(list(save_dir.glob('labels/*.txt')))} labels saved to {save_dir / 'labels'}" if save_txt else ''
         LOGGER.info(f"Results saved to {colorstr('bold', save_dir)}{s}")
     if update:
-        strip_optimizer(weights[0])  # update model (to fix SourceChangeWarning)
+        strip_optimizer(weights)  # update model (to fix SourceChangeWarning)
 
 
 def parse_opt():
