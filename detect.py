@@ -172,8 +172,8 @@ def run(
 
             # Stream results
             im0 = annotator.result()
-            cv2.imshow('detection',im0)
-            cv2.waitKey(1)
+#             cv2.imshow('detection',im0)
+#             cv2.waitKey(1)
             if view_img:
                 if p not in windows:
                     windows.append(p)
